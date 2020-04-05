@@ -8,6 +8,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 
 val apiModule = module {
@@ -21,7 +22,7 @@ val apiModule = module {
 val networkModule = module {
     fun provideHttpClient() = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BASIC
+            level = HttpLoggingInterceptor.Level.BODY
         })
         .build()
 
@@ -29,6 +30,7 @@ val networkModule = module {
         return Retrofit.Builder()
             .baseUrl(Const.BASE_URL)
             .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 

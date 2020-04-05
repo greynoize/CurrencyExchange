@@ -1,8 +1,9 @@
-package com.greynoize.base.ui.base
+package com.greynoize.base.ui.base.navigation
 
 import android.content.Intent
 import android.net.Uri
 import androidx.fragment.app.FragmentActivity
+import com.greynoize.base.ui.base.BaseFragment
 
 class Navigator(private val activity: FragmentActivity, private val host: Int) {
     fun goTo(location: Location) {

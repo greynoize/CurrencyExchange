@@ -9,6 +9,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.greynoize.base.R
+import com.greynoize.base.ui.base.navigation.Navigator
 import com.greynoize.base.ui.first.FirstViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

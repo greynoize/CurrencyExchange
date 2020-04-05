@@ -2,6 +2,8 @@ package com.greynoize.base.di
 
 import com.greynoize.base.Const
 import com.greynoize.base.repository.network.Api
+import com.greynoize.base.repository.network.search.SearchRepo
+import com.greynoize.base.repository.network.search.SearchRepoImplementation
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -32,4 +34,10 @@ val networkModule = module {
 
     single { provideHttpClient() }
     single { provideRetrofit(get()) }
+}
+
+val repositoryModule = module {
+    fun provideSearchRepository(api: Api): SearchRepo = SearchRepoImplementation(api)
+
+    single { provideSearchRepository(get()) }
 }

@@ -8,12 +8,8 @@ import com.greynoize.base.ui.base.navigation.Navigator
 import com.greynoize.base.ui.first.FirstScreenFragment
 
 class MainActivity : AppCompatActivity() {
-    private val navigator = Navigator(this, R.id.main_host)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        navigator.goTo(Location.Screen(FirstScreenFragment.newInstance()))
     }
 }

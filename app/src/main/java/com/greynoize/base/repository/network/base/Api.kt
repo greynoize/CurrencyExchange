@@ -1,11 +1,14 @@
-package com.greynoize.base.repository.network
+package com.greynoize.base.repository.network.base
 
+import com.greynoize.base.repository.model.TmdbMovie
+import kotlinx.coroutines.Deferred
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface Api {
-    @GET("/search/repositories")
-    fun searchRepos(@Query("q") search: String, @Query("sort") sort: String?, @Query("order") order: String?)
+    @GET("movie/popular")
+    suspend fun getPopularMovies() : Response<TmdbMovie>
 
     companion object {
         // Sorting params

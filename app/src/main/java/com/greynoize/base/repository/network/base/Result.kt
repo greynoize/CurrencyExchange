@@ -1,4 +1,4 @@
-package com.greynoize.base.repository.network
+package com.greynoize.base.repository.network.base
 
 import okhttp3.ResponseBody
 

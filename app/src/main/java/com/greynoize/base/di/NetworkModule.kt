@@ -1,15 +1,13 @@
 package com.greynoize.base.di
 
 import com.greynoize.base.Const
-import com.greynoize.base.repository.network.Api
-import com.greynoize.base.repository.network.search.SearchRepo
-import com.greynoize.base.repository.network.search.SearchRepoImplementation
+import com.greynoize.base.repository.network.MovieRepository
+import com.greynoize.base.repository.network.base.Api
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 
 val apiModule = module {
     fun provideApi(retrofit: Retrofit) = retrofit.create(Api::class.java)
@@ -39,7 +37,5 @@ val networkModule = module {
 }
 
 val repositoryModule = module {
-    fun provideSearchRepository(api: Api): SearchRepo = SearchRepoImplementation(api)
-
-    single { provideSearchRepository(get()) }
+    single { MovieRepository(get()) }
 }

@@ -10,6 +10,8 @@ class FirstScreenFragment: BaseFragment<FirstViewModel>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        fragmentViewModel.getMovies()
     }
 
     companion object {

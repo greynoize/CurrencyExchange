@@ -1,15 +1,16 @@
-package com.greynoize.base.repository.network
+package com.greynoize.base.repository.network.base
 
 import retrofit2.Response
 
-class BaseRepository {
+open class BaseRepository {
     suspend fun <T : Any> getApiResult(call: suspend () -> Response<T>): Result<T> {
         val response = call.invoke()
 
         return if (response.isSuccessful)
             Result.Success(response.body()!!)
         else
-            Result.Fail(response.errorBody()!!
-        )
+            Result.Fail(
+                response.errorBody()!!
+            )
     }
 }

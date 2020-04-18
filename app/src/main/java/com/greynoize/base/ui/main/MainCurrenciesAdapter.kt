@@ -7,9 +7,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.greynoize.base.R
 import com.greynoize.base.databinding.ItemCurrencyBinding
 import com.greynoize.base.ui.model.currency.CurrencyModel
+import com.greynoize.base.ui.model.currency.CurrencyNameModel
 
-class MainCurrenciesAdapter: RecyclerView.Adapter<MainCurrenciesAdapter.ViewHolder>() {
-    var items = mutableMapOf<CurrencyModel, Double>()
+class MainCurrenciesAdapter : RecyclerView.Adapter<MainCurrenciesAdapter.ViewHolder>() {
+    var items = mutableMapOf<CurrencyNameModel, Double>()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding: ItemCurrencyBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_currency, parent, false)
@@ -20,14 +25,10 @@ class MainCurrenciesAdapter: RecyclerView.Adapter<MainCurrenciesAdapter.ViewHold
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items.keys.toMutableList()[position]
+
         holder.binding.item = item
         holder.binding.executePendingBindings()
     }
 
-    private fun insertMovieItem(item: CurrencyModel, holder: ViewHolder) {
-        holder.binding.item = item
-        holder.binding.executePendingBindings()
-    }
-
-    inner class ViewHolder(var binding: ItemCurrencyBinding): RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(var binding: ItemCurrencyBinding) : RecyclerView.ViewHolder(binding.root)
 }

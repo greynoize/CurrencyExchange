@@ -33,12 +33,14 @@ class MainFragment : BaseFragment() {
         fragmentViewModel.currenciesList.observe(viewLifecycleOwner, Observer {
             val data = it ?: return@Observer
 
+            adapter.items = data
         })
     }
 
     private fun initUI() {
-        main_list.adapter = adapter
         layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        main_list.adapter = adapter
+        main_list.layoutManager = layoutManager
     }
 
     private fun getCurrenciesNames(): Map<String, String> {

@@ -3,7 +3,7 @@
     <data>
         <variable
             name="item"
-            type="com.greynoize.base.ui.model.currency.CurrencyModel" />
+            type="com.greynoize.base.ui.model.currency.CurrencyNameModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -29,6 +29,7 @@
             android:textSize="@dimen/currency_title_text_size"
             app:layout_constraintStart_toEndOf="@id/item_currency_icon"
             app:layout_constraintTop_toTopOf="@id/item_currency_icon"
+            android:text="@{item.title}"
             tools:text="EUR" />
 
         <TextView
@@ -39,6 +40,7 @@
             android:textSize="@dimen/currency_name_text_size"
             app:layout_constraintBottom_toBottomOf="@id/item_currency_icon"
             app:layout_constraintStart_toEndOf="@id/item_currency_icon"
+            android:text="@{item.fullName}"
             tools:text="EUR" />
 
         <EditText

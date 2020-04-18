@@ -7,15 +7,6 @@
 
     <fragment
         android:id="@+id/first_fragment"
-        android:name="com.greynoize.base.ui.first.FirstScreenFragment"
-        tools:layout="@layout/fragment_first" >
-        <action
-            android:id="@+id/action_first_fragment_to_secondFragment"
-            app:destination="@id/second_fragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/second_fragment"
-        android:name="com.greynoize.base.ui.second.SecondFragment"
-        android:label="SecondFragment"
-        tools:layout="@layout/fragment_second"/>
+        android:name="com.greynoize.base.ui.main.MainFragment"
+        tools:layout="@layout/fragment_main" />
 </navigation>

@@ -9,8 +9,6 @@ open class BaseRepository {
         return if (response.isSuccessful)
             Result.Success(response.body()!!)
         else
-            Result.Fail(
-                response.errorBody()!!
-            )
+            Result.Fail(response.errorBody()!!)
     }
 }

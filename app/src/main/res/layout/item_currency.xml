@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="item"
+            type="com.greynoize.base.ui.model.currency.CurrencyModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/item_currency_icon"
+            android:layout_width="@dimen/currency_icon_size"
+            android:layout_height="@dimen/currency_icon_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_launcher_background" />
+
+        <TextView
+            android:id="@+id/item_currency_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black_191C1F"
+            android:textSize="@dimen/currency_title_text_size"
+            app:layout_constraintStart_toEndOf="@id/item_currency_icon"
+            app:layout_constraintTop_toTopOf="@id/item_currency_icon"
+            tools:text="EUR" />
+
+        <TextView
+            android:id="@+id/item_currency_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray_8B959E"
+            android:textSize="@dimen/currency_name_text_size"
+            app:layout_constraintBottom_toBottomOf="@id/item_currency_icon"
+            app:layout_constraintStart_toEndOf="@id/item_currency_icon"
+            tools:text="EUR" />
+
+        <EditText
+            android:id="@+id/item_currency_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="0"
+            android:inputType="number"
+            android:maxLength="10"
+            android:textColor="@color/black_191C1F"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="1234567890" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

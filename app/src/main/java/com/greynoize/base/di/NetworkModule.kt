@@ -1,7 +1,7 @@
 package com.greynoize.base.di
 
 import com.greynoize.base.Const
-import com.greynoize.base.repository.network.MovieRepository
+import com.greynoize.base.repository.network.CurrencyRepository
 import com.greynoize.base.repository.network.base.Api
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -37,5 +37,5 @@ val networkModule = module {
 }
 
 val repositoryModule = module {
-    single { MovieRepository(get()) }
+    single { CurrencyRepository(get()) }
 }

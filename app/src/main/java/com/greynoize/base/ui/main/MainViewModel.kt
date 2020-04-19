@@ -15,7 +15,7 @@ class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseVi
     var baseCurrency = START_CURRENCY
         private set
 
-    var count = 100
+    var count = MutableLiveData<Double>(100.00)
 
     private val infoList: List<CurrencyInfoResponseModel>
 
@@ -61,8 +61,8 @@ class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseVi
             }
         }
 
-        delay(TIME_TO_WAIT_MS)
-        requestCurrencies()
+/*        delay(TIME_TO_WAIT_MS)
+        requestCurrencies()*/
     }
 
     fun onItemClick(item: CurrencyUIModel) {
@@ -80,6 +80,12 @@ class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseVi
         baseCurrency = item.code
         positionChanged = true
         currenciesList.postValue(items)
+    }
+
+    fun updateCount(enteredValue: Double, item: CurrencyUIModel) {
+        val newBaseCount: Double = (enteredValue / (item.priceToBase ?: 0.00))
+
+        count.postValue(newBaseCount)
     }
 
     companion object {

@@ -44,6 +44,12 @@ class MainFragment : BaseFragment() {
                 main_list.scrollToPosition(0)
             }
         })
+
+        fragmentViewModel.count.observe(viewLifecycleOwner, Observer {
+            it ?: return@Observer
+
+            adapter.notifyDataSetChanged()
+        })
     }
 
     private fun initUI() {

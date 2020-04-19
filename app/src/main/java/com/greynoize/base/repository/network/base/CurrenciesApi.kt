@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface Api {
+interface CurrenciesApi {
     @GET("api/android/latest")
     suspend fun getCurrencies(@Query("base") base: String) : Response<CurrencyResponseModel>
 }

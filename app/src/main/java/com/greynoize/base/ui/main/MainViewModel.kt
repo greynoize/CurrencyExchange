@@ -1,13 +1,11 @@
 package com.greynoize.base.ui.main
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.greynoize.base.repository.network.CurrencyRepository
+import com.greynoize.base.repository.network.repositories.CurrencyRepository
 import com.greynoize.base.repository.network.base.Result
 import com.greynoize.base.ui.base.BaseViewModel
 import com.greynoize.base.ui.model.currency.CurrencyNameModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseViewModel() {
     lateinit var currenciesNames: Map<String, String>
@@ -16,9 +14,12 @@ class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseVi
         private set
 
     fun getCurrencies() {
-        viewModelScope.launch {
+        /* TODO
+        Ебани вместо всего этого дерьма обычный файл
+         */
+/*        viewModelScope.launch {
             requestCurrencies()
-        }
+        }*/
     }
 
     private suspend fun requestCurrencies() {

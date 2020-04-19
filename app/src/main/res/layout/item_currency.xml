@@ -3,14 +3,16 @@
     <data>
         <variable
             name="item"
-            type="com.greynoize.base.ui.model.currency.CurrencyNameModel" />
+            type="com.greynoize.base.ui.model.currency.CurrencyUIModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:imageView="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_16">
 
         <ImageView
             android:id="@+id/item_currency_icon"
@@ -19,7 +21,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_launcher_background" />
+            imageView:srcFromResource="@{item.imageResource}" />
 
         <TextView
             android:id="@+id/item_currency_title"
@@ -29,7 +31,8 @@
             android:textSize="@dimen/currency_title_text_size"
             app:layout_constraintStart_toEndOf="@id/item_currency_icon"
             app:layout_constraintTop_toTopOf="@id/item_currency_icon"
-            android:text="@{item.title}"
+            android:layout_marginStart="@dimen/padding_16"
+            android:text="@{item.code}"
             tools:text="EUR" />
 
         <TextView
@@ -40,7 +43,8 @@
             android:textSize="@dimen/currency_name_text_size"
             app:layout_constraintBottom_toBottomOf="@id/item_currency_icon"
             app:layout_constraintStart_toEndOf="@id/item_currency_icon"
-            android:text="@{item.fullName}"
+            android:layout_marginStart="@dimen/padding_16"
+            android:text="@{item.nameResource}"
             tools:text="EUR" />
 
         <EditText

@@ -1,41 +1,66 @@
 package com.greynoize.base.ui.main
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.greynoize.base.repository.model.currency.CurrencyInfoResponseModel
 import com.greynoize.base.repository.network.repositories.CurrencyRepository
 import com.greynoize.base.repository.network.base.Result
 import com.greynoize.base.ui.base.BaseViewModel
-import com.greynoize.base.ui.model.currency.CurrencyNameModel
+import com.greynoize.base.ui.model.currency.CurrencyUIModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.util.*
 
 class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseViewModel() {
-    lateinit var currenciesNames: Map<String, String>
+    var baseCurrency = START_CURRENCY
 
-    var currenciesList = MutableLiveData<MutableMap<CurrencyNameModel, Double>>()
+    private val currenciesInfo: List<CurrencyInfoResponseModel>
+
+    var currenciesList = MutableLiveData<MutableList<CurrencyUIModel>>()
         private set
 
-    fun getCurrencies() {
-        /* TODO
-        Ебани вместо всего этого дерьма обычный файл
-         */
-/*        viewModelScope.launch {
+    init {
+        currenciesInfo = currencyRepository.getCurrenciesInfo()
+        viewModelScope.launch {
             requestCurrencies()
-        }*/
+        }
     }
 
     private suspend fun requestCurrencies() {
-        val result = currencyRepository.getCurrencies("EUR", currenciesNames)
+        val result = currencyRepository.getExchangeRates(baseCurrency)
 
         when (result) {
             is Result.Success -> {
-                currenciesList.postValue(result.value.rates.toMutableMap())
+                val list = mutableListOf<CurrencyUIModel>()
+
+                currenciesInfo.forEach {
+                    list.add(CurrencyUIModel(it.code, it.nameResource, it.imageResource, null, result.value.rates[it.code]))
+                }
+
+                currenciesList.postValue(list)
             }
         }
-
+/*
         delay(TIME_TO_WAIT_MS)
-        requestCurrencies()
+        requestCurrencies()*/
+    }
+
+    fun onItemClick(item: CurrencyUIModel) {
+        // Попробовать заменить тип на другой лист
+        val items = mutableListOf<CurrencyUIModel>()
+        items.add(item)
+
+        val oldList = mutableListOf<CurrencyUIModel>().apply {
+            addAll(currenciesList.value!!)
+            remove(item)
+        }
+
+        items.addAll(oldList)
+        currenciesList.postValue(items)
     }
 
     companion object {
         const val TIME_TO_WAIT_MS = 1000L
+        const val START_CURRENCY = "AUD"
     }
 }

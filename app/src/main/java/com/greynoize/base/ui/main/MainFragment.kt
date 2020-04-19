@@ -5,11 +5,10 @@ import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.greynoize.base.Const
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.greynoize.base.R
 import com.greynoize.base.ui.base.BaseFragment
+import com.greynoize.base.ui.main.adapter.MainCurrenciesAdapter
 import com.greynoize.base.ui.main.adapter.MainCurrenciesDiffUtilCallback
 import kotlinx.android.synthetic.main.fragment_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -18,9 +17,7 @@ class MainFragment : BaseFragment() {
     override val layout = R.layout.fragment_main
     override val fragmentViewModel by viewModel<MainViewModel>()
 
-    private var adapter = MainCurrenciesAdapter() {
-        fragmentViewModel.onItemClick(it)
-    }
+    private lateinit var adapter: MainCurrenciesAdapter
 
     private lateinit var layoutManager: LinearLayoutManager
 
@@ -31,6 +28,7 @@ class MainFragment : BaseFragment() {
     }
 
     private fun initViewModelData() {
+        // Добавить лоадер для пустого экрана
         fragmentViewModel.currenciesList.observe(viewLifecycleOwner, Observer {
             val data = it ?: return@Observer
 
@@ -39,12 +37,19 @@ class MainFragment : BaseFragment() {
 
             adapter.items = data
             diffUtilResult.dispatchUpdatesTo(adapter)
-            main_list.scrollToPosition(0)
+            (main_list.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+
+            if (fragmentViewModel.positionChanged) {
+                fragmentViewModel.positionChanged = false
+                main_list.scrollToPosition(0)
+            }
         })
     }
 
     private fun initUI() {
+        adapter = MainCurrenciesAdapter(fragmentViewModel)
         layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+
         main_list.adapter = adapter
         main_list.layoutManager = layoutManager
     }

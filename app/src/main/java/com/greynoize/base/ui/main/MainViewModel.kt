@@ -3,6 +3,7 @@ package com.greynoize.base.ui.main
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.greynoize.base.repository.model.currency.CurrencyInfoResponseModel
+import com.greynoize.base.repository.model.currency.ExchangeRateResponseModel
 import com.greynoize.base.repository.network.base.Result
 import com.greynoize.base.repository.network.repositories.CurrencyRepository
 import com.greynoize.base.ui.base.BaseViewModel
@@ -40,33 +41,7 @@ class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseVi
                     return
                 }
 
-                if (currenciesList.value.isNullOrEmpty()) {
-                    val list = arrayListOf<CurrencyUIModel>()
-
-                    infoList.forEach {
-                        if (it.code == baseCurrency) {
-                            list.add(CurrencyUIModel(it.code, it.nameResource, it.imageResource, count, BASE_EXCHANGE_RATE))
-                        } else {
-                            val currencyRate = result.value.rates[it.code] ?: 0.00
-
-                            list.add(CurrencyUIModel(it.code, it.nameResource, it.imageResource, count * currencyRate, currencyRate))
-                        }
-                    }
-
-                    currenciesList.postValue(list)
-                } else {
-                    currenciesList.value!!.forEach {
-                        if (it.code != baseCurrency) {
-                            val newRate = result.value.rates[it.code] ?: 0.00
-                            val newTotal = newRate * count
-
-                            it.priceToBase = newRate
-                            it.total = newTotal
-                        }
-                    }
-
-                    currenciesList.postValue(currenciesList.value)
-                }
+                handleSuccess(result.value)
             }
         }
 
@@ -74,13 +49,38 @@ class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseVi
         requestCurrencies()
     }
 
+    private fun handleSuccess(result: ExchangeRateResponseModel) {
+        if (currenciesList.value.isNullOrEmpty()) {
+            val list = arrayListOf<CurrencyUIModel>()
+
+            infoList.forEach {
+                if (it.code == baseCurrency) {
+                    list.add(CurrencyUIModel(it.code, it.nameResource, it.imageResource, count, BASE_EXCHANGE_RATE))
+                } else {
+                    val currencyRate = result.rates[it.code] ?: 0.00
+                    list.add(CurrencyUIModel(it.code, it.nameResource, it.imageResource, count * currencyRate, currencyRate))
+                }
+            }
+
+            currenciesList.postValue(list)
+        } else {
+            currenciesList.value!!.forEach {
+                if (it.code != baseCurrency) {
+                    it.priceToBase = result.rates[it.code] ?: 0.00
+                    it.total = it.priceToBase * count
+                }
+            }
+
+            currenciesList.postValue(currenciesList.value)
+        }
+    }
+
     fun onItemClick(item: CurrencyUIModel) {
         baseCurrency = item.code
+        currenciesList.value!!.remove(item)
 
         val items = arrayListOf<CurrencyUIModel>()
         items.add(item)
-
-        currenciesList.value!!.remove(item)
         items.addAll(currenciesList.value!!)
 
         items.forEach {

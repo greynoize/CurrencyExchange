@@ -1,6 +1,5 @@
 package com.greynoize.base.ui.main.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
@@ -56,7 +55,6 @@ class MainCurrenciesAdapter(private val viewModel: MainViewModel) : RecyclerView
 
                 if (item.code == viewModel.baseCurrency && viewModel.count.toString() != stringValue && adapterPosition == 0) {
                     val doubleValue = if (stringValue.isEmpty()) 0.00 else stringValue.toDouble()
-                    Log.d("TAAG", doubleValue.toString())
 
                     items[0].total = doubleValue
                     viewModel.updateCount(doubleValue)

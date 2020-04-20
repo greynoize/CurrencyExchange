@@ -55,6 +55,8 @@
             app:layout_constraintStart_toEndOf="@id/item_currency_icon"
             android:layout_marginStart="@dimen/padding_16"
             android:text="@{item.nameResource}"
+            android:maxLength="25"
+            android:ellipsize="end"
             tools:text="EUR" />
 
         <EditText

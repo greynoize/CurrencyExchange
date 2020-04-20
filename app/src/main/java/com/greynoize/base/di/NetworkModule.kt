@@ -10,13 +10,13 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 val apiModule = module {
-    fun provideRevolutApi(): CurrenciesApi {
+    fun provideExchangeApi(): CurrenciesApi {
         val client = createOkHttpBuilder().build()
         val retrofit = createRetrofit(client, Const.BASE_URL)
         return retrofit.create(CurrenciesApi::class.java)
     }
 
-    single { provideRevolutApi() }
+    single { provideExchangeApi() }
 }
 
 val repositoryModule = module {

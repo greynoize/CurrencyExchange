@@ -16,12 +16,12 @@ class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseVi
 
     var count = DEFAULT_COUNT_VALUE
 
-    private val infoList: List<CurrencyInfoResponseModel> = currencyRepository.getCurrenciesInfo()
-
     var currenciesList = MutableLiveData<MutableList<CurrencyUIModel>>()
         private set
 
     var positionChanged = false
+
+    private val infoList: List<CurrencyInfoResponseModel> = currencyRepository.getCurrenciesInfo()
 
     init {
         viewModelScope.launch {
@@ -45,10 +45,10 @@ class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseVi
 
                     infoList.forEach {
                         if (it.code == baseCurrency) {
-                            list.add(CurrencyUIModel(it.code, it.nameResource, it.imageResource, count, 1.00))
+                            list.add(CurrencyUIModel(it.code, it.nameResource, it.imageResource, count, BASE_EXCHANGE_RATE))
                         } else {
                             val currencyRate = result.value.rates[it.code] ?: 0.00
-                            
+
                             list.add(CurrencyUIModel(it.code, it.nameResource, it.imageResource, count * currencyRate, currencyRate))
                         }
                     }
@@ -77,25 +77,17 @@ class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseVi
     fun onItemClick(item: CurrencyUIModel) {
         baseCurrency = item.code
 
-        val itemRate = item.priceToBase
         val items = arrayListOf<CurrencyUIModel>()
         items.add(item)
 
-        val oldList = arrayListOf<CurrencyUIModel>().apply {
-            currenciesList.value!!.forEach {
-                add(it.copy())
-            }
-
-            remove(item)
-        }
-
-        items.addAll(oldList)
+        currenciesList.value!!.remove(item)
+        items.addAll(currenciesList.value!!)
 
         items.forEach {
             if (it.code == baseCurrency) {
-                it.priceToBase = 1.00
+                it.priceToBase = BASE_EXCHANGE_RATE
             } else {
-                it.priceToBase = (it.priceToBase) / itemRate
+                it.priceToBase = it.priceToBase / item.priceToBase
             }
         }
 
@@ -122,5 +114,6 @@ class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseVi
         const val TIME_TO_WAIT_MS = 1000L
         const val START_CURRENCY = "AUD"
         const val DEFAULT_COUNT_VALUE = 100.00
+        const val BASE_EXCHANGE_RATE = 1.00
     }
 }

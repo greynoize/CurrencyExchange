@@ -39,7 +39,6 @@ class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseVi
 
         requestJob = viewModelScope.launch {
             try {
-                // Pause when application on pause
                 val result = currencyRepository.getExchangeRates(baseCurrency)
 
                 when (result) {

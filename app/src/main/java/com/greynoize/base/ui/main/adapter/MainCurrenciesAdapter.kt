@@ -18,7 +18,7 @@ class MainCurrenciesAdapter(private val viewModel: MainViewModel) : RecyclerView
         field.clear()
 
         value.forEach {
-            field.add(CurrencyUIModel(it.code, it.nameResource, it.imageResource, it.total, it.priceToBase))
+            field.add(it.copy())
         }
     }
 
@@ -57,7 +57,7 @@ class MainCurrenciesAdapter(private val viewModel: MainViewModel) : RecyclerView
                     Log.d("TAAG", doubleValue.toString())
 
                     items[0].total = doubleValue
-                    viewModel.updateCount(doubleValue, item)
+                    viewModel.updateCount(doubleValue)
                 }
             }
 

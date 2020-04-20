@@ -25,6 +25,8 @@ class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseVi
     private val infoList: List<CurrencyInfoResponseModel> = currencyRepository.getCurrenciesInfo()
 
     init {
+        loading.postValue(true)
+
         viewModelScope.launch {
             requestCurrencies()
         }
@@ -36,6 +38,10 @@ class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseVi
 
         when (result) {
             is Result.Success -> {
+                if (loading.value == true) {
+                    loading.postValue(false)
+                }
+
                 if (result.value.baseCurrency != baseCurrency) {
                     requestCurrencies()
                     return

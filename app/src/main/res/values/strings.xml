@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">My Application</string>
     <string name="hint">0</string>
+    <string name="rates">Rates</string>
 
     <!-- Language codes-->
     <string name="aud">Australian Dollar</string>

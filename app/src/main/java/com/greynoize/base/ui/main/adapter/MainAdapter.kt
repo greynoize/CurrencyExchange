@@ -11,7 +11,7 @@ import com.greynoize.base.ui.main.MainViewModel
 import com.greynoize.base.ui.model.currency.CurrencyUIModel
 
 //  You can change the viewModel to a callback, but, because we don't reuse this adapter, here can be the the vm
-class MainCurrenciesAdapter(private val viewModel: MainViewModel) : RecyclerView.Adapter<MainCurrenciesAdapter.ViewHolder>() {
+class MainAdapter(private val viewModel: MainViewModel) : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
     var items = mutableListOf<CurrencyUIModel>()
     set(value) {
         field.clear()

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="currency_icon_size">40dp</dimen>
+    <dimen name="loading_size">40dp</dimen>
     <dimen name="padding_16">16dp</dimen>
 
+    <dimen name="currency_header">20sp</dimen>
     <dimen name="currency_title_text_size">16sp</dimen>
     <dimen name="currency_name_text_size">14sp</dimen>
     <dimen name="currency_amount_text_size">20sp</dimen>

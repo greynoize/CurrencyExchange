@@ -8,6 +8,8 @@ import com.greynoize.base.repository.network.base.Result
 import com.greynoize.base.repository.network.repositories.CurrencyRepository
 import com.greynoize.base.ui.base.BaseViewModel
 import com.greynoize.base.ui.model.currency.CurrencyUIModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -24,35 +26,52 @@ class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseVi
 
     private val infoList: List<CurrencyInfoResponseModel> = currencyRepository.getCurrenciesInfo()
 
+    private var requestJob: Job? = null
+
     init {
         loading.postValue(true)
+    }
 
-        viewModelScope.launch {
-            requestCurrencies()
+    private var canSendRepeatableRequest = true
+
+    fun requestCurrencies() {
+        canSendRepeatableRequest = true
+
+        requestJob = viewModelScope.launch {
+            try {
+                // Pause when application on pause
+                val result = currencyRepository.getExchangeRates(baseCurrency)
+
+                when (result) {
+                    is Result.Success -> {
+                        if (loading.value == true) {
+                            loading.postValue(false)
+                        }
+
+                        if (result.value.baseCurrency != baseCurrency) {
+                            requestCurrencies()
+                            return@launch
+                        }
+
+                        handleSuccess(result.value)
+                    }
+                }
+
+                delay(TIME_TO_WAIT_MS)
+                requestJob?.cancelAndJoin()
+            } finally {
+                if (canSendRepeatableRequest) {
+                    requestCurrencies()
+                }
+            }
         }
     }
 
-    private suspend fun requestCurrencies() {
-        // Pause when application on pause
-        val result = currencyRepository.getExchangeRates(baseCurrency)
-
-        when (result) {
-            is Result.Success -> {
-                if (loading.value == true) {
-                    loading.postValue(false)
-                }
-
-                if (result.value.baseCurrency != baseCurrency) {
-                    requestCurrencies()
-                    return
-                }
-
-                handleSuccess(result.value)
-            }
+    fun cancelRequest(cancelRepeat: Boolean) {
+        viewModelScope.launch {
+            canSendRepeatableRequest = !cancelRepeat
+            requestJob?.cancel()
         }
-
-        delay(TIME_TO_WAIT_MS)
-        requestCurrencies()
     }
 
     private fun handleSuccess(result: ExchangeRateResponseModel) {
@@ -100,6 +119,7 @@ class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseVi
         positionChanged = true
         count = item.total
         currenciesList.postValue(items)
+        cancelRequest(false)
     }
 
     fun updateCount(enteredValue: Double) {

@@ -38,6 +38,16 @@ class MainFragment : BaseFragment() {
         initViewModelData()
     }
 
+    override fun onResume() {
+        super.onResume()
+        fragmentViewModel.requestCurrencies()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        fragmentViewModel.cancelRequest(true)
+    }
+
     private fun initViewModelData() {
         // Добавить лоадер для пустого экрана
         fragmentViewModel.currenciesList.observe(viewLifecycleOwner, Observer {

@@ -37,18 +37,11 @@ class MainFragment : BaseFragment() {
 
             adapter.items = data
             diffUtilResult.dispatchUpdatesTo(adapter)
-            (main_list.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
 
             if (fragmentViewModel.positionChanged) {
                 fragmentViewModel.positionChanged = false
                 main_list.scrollToPosition(0)
             }
-        })
-
-        fragmentViewModel.count.observe(viewLifecycleOwner, Observer {
-            it ?: return@Observer
-
-            adapter.notifyDataSetChanged()
         })
     }
 
@@ -58,5 +51,6 @@ class MainFragment : BaseFragment() {
 
         main_list.adapter = adapter
         main_list.layoutManager = layoutManager
+        (main_list.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
     }
 }

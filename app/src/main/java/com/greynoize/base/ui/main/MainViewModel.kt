@@ -3,23 +3,21 @@ package com.greynoize.base.ui.main
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.greynoize.base.repository.model.currency.CurrencyInfoResponseModel
-import com.greynoize.base.repository.network.repositories.CurrencyRepository
 import com.greynoize.base.repository.network.base.Result
+import com.greynoize.base.repository.network.repositories.CurrencyRepository
 import com.greynoize.base.ui.base.BaseViewModel
 import com.greynoize.base.ui.model.currency.CurrencyUIModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.collections.ArrayList
 
 class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseViewModel() {
     var baseCurrency = START_CURRENCY
         private set
 
-    var count = MutableLiveData<Double>(100.00)
+    var count = DEFAULT_COUNT_VALUE
 
     private val infoList: List<CurrencyInfoResponseModel>
 
-    var currenciesList = MutableLiveData<ArrayList<CurrencyUIModel>>()
+    var currenciesList = MutableLiveData<MutableList<CurrencyUIModel>>()
         private set
 
     var positionChanged = false
@@ -38,15 +36,32 @@ class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseVi
         when (result) {
             is Result.Success -> {
                 if (result.value.baseCurrency != baseCurrency) return
-                
+
                 if (currenciesList.value.isNullOrEmpty()) {
                     val list = arrayListOf<CurrencyUIModel>()
 
                     infoList.forEach {
                         if (it.code == baseCurrency) {
-                            list.add(CurrencyUIModel(it.code, it.nameResource, it.imageResource, null, 1.00))
+                            list.add(
+                                CurrencyUIModel(
+                                    it.code,
+                                    it.nameResource,
+                                    it.imageResource,
+                                    count,
+                                    1.00
+                                )
+                            )
                         } else {
-                            list.add(CurrencyUIModel(it.code, it.nameResource, it.imageResource, null, result.value.rates[it.code]))
+                            val currencyRate = result.value.rates[it.code] ?: 0.00
+                            list.add(
+                                CurrencyUIModel(
+                                    it.code,
+                                    it.nameResource,
+                                    it.imageResource,
+                                    count * currencyRate,
+                                    currencyRate
+                                )
+                            )
                         }
                     }
 
@@ -54,7 +69,15 @@ class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseVi
                 } else {
                     val list = arrayListOf<CurrencyUIModel>().apply {
                         currenciesList.value!!.forEach {
-                            add(CurrencyUIModel(it.code, it.nameResource, it.imageResource, it.count, result.value.rates[it.code]))
+                            add(
+                                CurrencyUIModel(
+                                    it.code,
+                                    it.nameResource,
+                                    it.imageResource,
+                                    it.total,
+                                    result.value.rates[it.code] ?: 0.00
+                                )
+                            )
                         }
                     }
 
@@ -70,13 +93,21 @@ class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseVi
     fun onItemClick(item: CurrencyUIModel) {
         baseCurrency = item.code
 
-        val itemRate = item.priceToBase ?: 0.00
+        val itemRate = item.priceToBase
         val items = arrayListOf<CurrencyUIModel>()
         items.add(item)
 
         val oldList = arrayListOf<CurrencyUIModel>().apply {
             currenciesList.value!!.forEach {
-                add(CurrencyUIModel(it.code, it.nameResource, it.imageResource, it.count, it.priceToBase))
+                add(
+                    CurrencyUIModel(
+                        it.code,
+                        it.nameResource,
+                        it.imageResource,
+                        it.total,
+                        it.priceToBase
+                    )
+                )
             }
 
             remove(item)
@@ -88,22 +119,33 @@ class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseVi
             if (it.code == baseCurrency) {
                 it.priceToBase = 1.00
             } else {
-                it.priceToBase = (it.priceToBase ?: 0.00) / itemRate
+                it.priceToBase = (it.priceToBase) / itemRate
             }
         }
 
         positionChanged = true
+        count = item.total
         currenciesList.postValue(items)
+        //count.postValue(item.total)
     }
 
     fun updateCount(enteredValue: Double, item: CurrencyUIModel) {
-        val newBaseCount: Double = (enteredValue / (item.priceToBase ?: 0.00))
+        count = enteredValue
 
-        count.postValue(newBaseCount)
+        currenciesList.value!!.forEach {
+            if (it.code == baseCurrency) {
+                it.total = count
+            } else {
+                it.total = enteredValue * it.priceToBase
+            }
+        }
+
+        currenciesList.postValue(currenciesList.value!!)
     }
 
     companion object {
         const val TIME_TO_WAIT_MS = 1000L
         const val START_CURRENCY = "AUD"
+        const val DEFAULT_COUNT_VALUE = 100.00
     }
 }

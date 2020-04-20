@@ -19,6 +19,6 @@ class MainCurrenciesDiffUtilCallback(private val oldList: List<CurrencyUIModel>,
         val oldItem = oldList[oldItemPosition]
         val newItem = newList[newItemPosition]
 
-        return oldItem.code == newItem.code && oldItem.priceToBase == newItem.priceToBase
+        return oldItem.code == newItem.code && oldItem.priceToBase == newItem.priceToBase && oldItem.total == newItem.total
     }
 }

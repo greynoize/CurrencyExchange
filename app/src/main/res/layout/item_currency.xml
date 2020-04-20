@@ -12,6 +12,10 @@
         <variable
             name="viewModel"
             type="com.greynoize.base.ui.main.MainViewModel" />
+
+        <variable
+            name="position"
+            type="Integer" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -58,13 +62,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="@string/hint"
-            android:inputType="number"
+            android:inputType="numberDecimal"
             android:maxLength="10"
             android:textColor="@color/black_191C1F"
             android:imeOptions="actionDone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:digits="0123456789."
             tools:text="1234567890" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

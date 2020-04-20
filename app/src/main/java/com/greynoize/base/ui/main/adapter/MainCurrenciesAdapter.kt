@@ -1,7 +1,9 @@
 package com.greynoize.base.ui.main.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.greynoize.base.R
@@ -11,10 +13,13 @@ import com.greynoize.base.ui.model.currency.CurrencyUIModel
 
 //  You can change the viewModel to a callback, but, because we don't reuse this adapter, here can be the the vm
 class MainCurrenciesAdapter(private val viewModel: MainViewModel) : RecyclerView.Adapter<MainCurrenciesAdapter.ViewHolder>() {
-    var items = arrayListOf<CurrencyUIModel>()
+    var items = mutableListOf<CurrencyUIModel>()
     set(value) {
         field.clear()
-        field.addAll(value)
+
+        value.forEach {
+            field.add(CurrencyUIModel(it.code, it.nameResource, it.imageResource, it.total, it.priceToBase))
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -38,6 +43,21 @@ class MainCurrenciesAdapter(private val viewModel: MainViewModel) : RecyclerView
             binding.itemCurrencyInput.setOnFocusChangeListener { v, hasFocus ->
                 if (hasFocus && position != 0) {
                     viewModel.onItemClick(item)
+                }
+            }
+
+            val editTextValue = if (adapterPosition == 0) viewModel.count.toString() else String.format("%.2f", item.total)
+            binding.itemCurrencyInput.setText(editTextValue)
+
+            binding.itemCurrencyInput.addTextChangedListener {
+                val stringValue = (it.toString())
+
+                if (item.code == viewModel.baseCurrency && viewModel.count.toString() != stringValue && adapterPosition == 0) {
+                    val doubleValue = if (stringValue.isEmpty()) 0.00 else stringValue.toDouble()
+                    Log.d("TAAG", doubleValue.toString())
+
+                    items[0].total = doubleValue
+                    viewModel.updateCount(doubleValue, item)
                 }
             }
 

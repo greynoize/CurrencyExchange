@@ -7,10 +7,12 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.greynoize.base.R
 import com.greynoize.base.databinding.FragmentMainBinding
 import com.greynoize.base.ui.base.BaseFragment
+import com.greynoize.base.ui.base.KeyboardUtils
 import com.greynoize.base.ui.main.adapter.MainAdapter
 import com.greynoize.base.ui.main.adapter.MainDiffUtilCallback
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -61,5 +63,13 @@ class MainFragment : BaseFragment() {
         main_list.adapter = adapter
         main_list.layoutManager = layoutManager
         (main_list.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+
+        main_list.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (layoutManager.findFirstVisibleItemPosition() > 0) {
+                    KeyboardUtils.hideKeyboard(main_list)
+                }
+            }
+        })
     }
 }

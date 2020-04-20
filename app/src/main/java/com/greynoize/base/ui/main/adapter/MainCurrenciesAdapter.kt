@@ -46,7 +46,9 @@ class MainCurrenciesAdapter(private val viewModel: MainViewModel) : RecyclerView
                 }
             }
 
-            val editTextValue = if (adapterPosition == 0) viewModel.count.toString() else String.format("%.2f", item.total)
+            val total = if (adapterPosition == 0) viewModel.count else item.total
+
+            val editTextValue = String.format("%.2f", total)
             binding.itemCurrencyInput.setText(editTextValue)
 
             binding.itemCurrencyInput.addTextChangedListener {

@@ -7,6 +7,7 @@ import com.greynoize.base.repository.network.base.Result
 import com.greynoize.base.repository.network.repositories.CurrencyRepository
 import com.greynoize.base.ui.base.BaseViewModel
 import com.greynoize.base.ui.model.currency.CurrencyUIModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseViewModel() {
@@ -34,7 +35,10 @@ class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseVi
 
         when (result) {
             is Result.Success -> {
-                if (result.value.baseCurrency != baseCurrency) return
+                if (result.value.baseCurrency != baseCurrency) {
+                    requestCurrencies()
+                    return
+                }
 
                 if (currenciesList.value.isNullOrEmpty()) {
                     val list = arrayListOf<CurrencyUIModel>()
@@ -44,33 +48,30 @@ class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseVi
                             list.add(CurrencyUIModel(it.code, it.nameResource, it.imageResource, count, 1.00))
                         } else {
                             val currencyRate = result.value.rates[it.code] ?: 0.00
-                            list.add(
-                                CurrencyUIModel(
-                                    it.code,
-                                    it.nameResource,
-                                    it.imageResource,
-                                    count * currencyRate,
-                                    currencyRate
-                                )
-                            )
+                            
+                            list.add(CurrencyUIModel(it.code, it.nameResource, it.imageResource, count * currencyRate, currencyRate))
                         }
                     }
 
                     currenciesList.postValue(list)
                 } else {
-                    val list = arrayListOf<CurrencyUIModel>().apply {
-                        currenciesList.value!!.forEach {
-                            add(it.copy(priceToBase = result.value.rates[it.code] ?: 0.00))
+                    currenciesList.value!!.forEach {
+                        if (it.code != baseCurrency) {
+                            val newRate = result.value.rates[it.code] ?: 0.00
+                            val newTotal = newRate * count
+
+                            it.priceToBase = newRate
+                            it.total = newTotal
                         }
                     }
 
-                    currenciesList.postValue(list)
+                    currenciesList.postValue(currenciesList.value)
                 }
             }
         }
 
-/*        delay(TIME_TO_WAIT_MS)
-        requestCurrencies()*/
+        delay(TIME_TO_WAIT_MS)
+        requestCurrencies()
     }
 
     fun onItemClick(item: CurrencyUIModel) {

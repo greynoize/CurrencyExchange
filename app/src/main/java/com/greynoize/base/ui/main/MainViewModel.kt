@@ -66,16 +66,24 @@ class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseVi
     }
 
     fun onItemClick(item: CurrencyUIModel) {
-        // Попробовать заменить тип на другой лист
+        val itemCurrency = item.code
+        val itemRate = item.priceToBase ?: 0.00
         val items = arrayListOf<CurrencyUIModel>()
         items.add(item)
 
         val oldList = arrayListOf<CurrencyUIModel>().apply {
-            addAll(currenciesList.value!!)
+            currenciesList.value!!.forEach {
+                add(CurrencyUIModel(it.code, it.nameResource, it.imageResource, it.count, it.priceToBase))
+            }
+
             remove(item)
         }
 
         items.addAll(oldList)
+
+        items.forEach {
+            it.priceToBase =  (it.priceToBase ?: 0.00) / itemRate
+        }
 
         baseCurrency = item.code
         positionChanged = true

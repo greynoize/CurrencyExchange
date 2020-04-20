@@ -13,7 +13,7 @@ data class CurrencyUIModel(
     val nameResource: Int,
     val imageResource: Int,
     val count: Double?,
-    val priceToBase: Double?
+    var priceToBase: Double?
 )
 
 @BindingAdapter("imageView:srcFromResource")

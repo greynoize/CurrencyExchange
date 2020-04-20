@@ -25,12 +25,23 @@ class MainCurrenciesAdapter(private val viewModel: MainViewModel) : RecyclerView
     override fun getItemCount() = items.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = items[position]
-
-        holder.binding.item = item
-        holder.binding.viewModel = viewModel
-        holder.binding.executePendingBindings()
+        holder.bind(position)
     }
 
-    inner class ViewHolder(var binding: ItemCurrencyBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(private val binding: ItemCurrencyBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(position: Int) {
+            val item = items[position]
+
+            binding.item = item
+            binding.viewModel = viewModel
+
+            binding.itemCurrencyInput.setOnFocusChangeListener { v, hasFocus ->
+                if (hasFocus && position != 0) {
+                    viewModel.onItemClick(item)
+                }
+            }
+
+            binding.executePendingBindings()
+        }
+    }
 }

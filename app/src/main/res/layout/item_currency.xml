@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:imageView="http://schemas.android.com/apk/res-auto"
-    xmlns:editText="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -59,17 +57,14 @@
             android:id="@+id/item_currency_input"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="0"
+            android:hint="@string/hint"
             android:inputType="number"
             android:maxLength="10"
             android:textColor="@color/black_191C1F"
+            android:imeOptions="actionDone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            editText:firstDouble="@{viewModel.count}"
-            editText:viewModel="@{viewModel}"
-            editText:textChanged="@{item}"
-            editText:item="@{item}"
             tools:text="1234567890" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

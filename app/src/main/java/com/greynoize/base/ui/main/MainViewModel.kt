@@ -37,6 +37,8 @@ class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseVi
 
         when (result) {
             is Result.Success -> {
+                if (result.value.baseCurrency != baseCurrency) return
+                
                 if (currenciesList.value.isNullOrEmpty()) {
                     val list = arrayListOf<CurrencyUIModel>()
 
@@ -66,7 +68,8 @@ class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseVi
     }
 
     fun onItemClick(item: CurrencyUIModel) {
-        val itemCurrency = item.code
+        baseCurrency = item.code
+
         val itemRate = item.priceToBase ?: 0.00
         val items = arrayListOf<CurrencyUIModel>()
         items.add(item)
@@ -82,10 +85,13 @@ class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseVi
         items.addAll(oldList)
 
         items.forEach {
-            it.priceToBase =  (it.priceToBase ?: 0.00) / itemRate
+            if (it.code == baseCurrency) {
+                it.priceToBase = 1.00
+            } else {
+                it.priceToBase = (it.priceToBase ?: 0.00) / itemRate
+            }
         }
 
-        baseCurrency = item.code
         positionChanged = true
         currenciesList.postValue(items)
     }

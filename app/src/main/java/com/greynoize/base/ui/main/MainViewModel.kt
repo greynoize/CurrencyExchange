@@ -121,7 +121,7 @@ class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseVi
         cancelRequest(false)
     }
 
-    fun updateCount(enteredValue: Double) {
+    fun updateCount(enteredValue: Double) : Double {
         count = enteredValue
 
         currenciesList.value!!.forEach {
@@ -133,6 +133,7 @@ class MainViewModel(private val currencyRepository: CurrencyRepository) : BaseVi
         }
 
         currenciesList.postValue(currenciesList.value!!)
+        return count
     }
 
     companion object {

@@ -26,7 +26,7 @@ class CurrencyRepository(private val currenciesApi: CurrenciesApi) : BaseReposit
             add(CurrencyInfoResponseModel("BGN", R.string.bgn, R.drawable.ic_bulgaria))
             add(CurrencyInfoResponseModel("BRL", R.string.brl, R.drawable.ic_brazil))
             add(CurrencyInfoResponseModel("CAD", R.string.cad, R.drawable.ic_canada))
-            add(CurrencyInfoResponseModel("CHF", R.string.chf, R.drawable.ic_sweden))
+            add(CurrencyInfoResponseModel("CHF", R.string.chf, R.drawable.ic_swiss))
             add(CurrencyInfoResponseModel("CNY", R.string.cny, R.drawable.ic_china))
             add(CurrencyInfoResponseModel("CZK", R.string.czk, R.drawable.ic_czech_republic))
             add(CurrencyInfoResponseModel("DKK", R.string.dkk, R.drawable.ic_denmark))

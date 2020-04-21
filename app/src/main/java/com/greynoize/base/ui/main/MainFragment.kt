@@ -45,11 +45,10 @@ class MainFragment : BaseFragment() {
 
     override fun onPause() {
         super.onPause()
-        fragmentViewModel.cancelRequest(true)
+        fragmentViewModel.cancelRequest(true) // cancels request in pause
     }
 
     private fun initViewModelData() {
-        // Добавить лоадер для пустого экрана
         fragmentViewModel.currenciesList.observe(viewLifecycleOwner, Observer {
             val data = it ?: return@Observer
 

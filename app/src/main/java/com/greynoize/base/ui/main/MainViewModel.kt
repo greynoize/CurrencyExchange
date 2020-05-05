@@ -6,6 +6,7 @@ import com.greynoize.base.repository.model.currency.CurrencyInfoResponseModel
 import com.greynoize.base.repository.model.currency.ExchangeRateResponseModel
 import com.greynoize.base.repository.network.base.Result
 import com.greynoize.base.repository.network.repositories.CurrencyRepository
+import com.greynoize.base.repository.network.repositories.CurrencyRepositoryImpl
 import com.greynoize.base.ui.base.BaseViewModel
 import com.greynoize.base.ui.model.currency.CurrencyUIModel
 import kotlinx.coroutines.Job

@@ -3,6 +3,7 @@ package com.greynoize.base.di
 import com.greynoize.base.Const
 import com.greynoize.base.repository.network.base.CurrenciesApi
 import com.greynoize.base.repository.network.repositories.CurrencyRepository
+import com.greynoize.base.repository.network.repositories.CurrencyRepositoryImpl
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -21,10 +22,12 @@ val apiModule = module {
 
 val repositoryModule = module {
     single {
-        CurrencyRepository(
-            get()
-        )
+        provideCurrencyRepository(get())
     }
+}
+
+fun provideCurrencyRepository(currenciesApi: CurrenciesApi): CurrencyRepository {
+    return CurrencyRepositoryImpl(currenciesApi)
 }
 
 fun createRetrofit(client: OkHttpClient, url: String): Retrofit {
@@ -41,4 +44,3 @@ fun createOkHttpBuilder(): OkHttpClient.Builder {
             level = HttpLoggingInterceptor.Level.BODY
         })
 }
-
